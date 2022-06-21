@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.github.dmtex.sdk</groupId>
+    <artifactId>dmtex-parent</artifactId>
+    <version>1</version>
+    <relativePath/>
+  </parent>
+  <artifactId>dmtex-measure-core</artifactId>
+  <version>1.0</version>
+  <name>DMtex JSR 385 (javax.measure) Core Classes</name>
+  <description>DMTex JSR 385 (javax.measure) Implementation Core Project</description>
+  <properties>
+    <dmtex-math-adapter.version>1.0</dmtex-math-adapter.version>
+    <dmtex-math-format-core.version>1.0</dmtex-math-format-core.version>
+    <si-quantity.version>2.1</si-quantity.version>
+    <systems-quantity.version>2.1</systems-quantity.version>
+    <unit-api.version>2.1.3</unit-api.version>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>com.github.dmtex.sdk</groupId>
+      <artifactId>dmtex-math-adapter</artifactId>
+      <version>${dmtex-math-adapter.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.dmtex.sdk</groupId>
+      <artifactId>dmtex-math-format-core</artifactId>
+      <version>${dmtex-math-format-core.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>si.uom</groupId>
+      <artifactId>si-quantity</artifactId>
+      <version>${si-quantity.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>systems.uom</groupId>
+      <artifactId>systems-quantity</artifactId>
+      <version>${systems-quantity.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.measure</groupId>
+      <artifactId>unit-api</artifactId>
+      <version>${unit-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>

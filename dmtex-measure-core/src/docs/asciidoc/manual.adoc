@@ -1,0 +1,299 @@
+= User Manual
+
+== Introduction
+
+The manual describes aspects of the JSR 363 DMTex implementation.
+For using Units of Measurement API along with this implementation.
+
+== Overview
+
+The _dmtex-measure-core_ module implements JSR 363 specification and provides both an implementation of the interfaces
+defined in the API section of this specification, and some helpful elements which are not part of the API.
+
+== Supported Units
+
+The out-of-the-box units providing classes in the implementation are following:
+
+* `MetricUnits` contains base SI units, such as *Ampere*, *Candela*, *Kelvin*, *Kilogram*, *Meter*, *Mole* and *Second*
+* `MeterUnits` contains units based on *Meter*, such as *Kilometer*, *Square meter*, *Meter per second* and others
+* `TimeUnits` contains time units, such as *Minute*, *Hour*, *Day* and others
+* `RadianUnits` contains radian related units, such as *Radian*, *Steradian*, *Radian per second* and others
+* `AmpereUnits` contains Ampere related units, such as *Coulomb*, *Volt*, *Farad*, *Ohm* and others
+* `NamedUnits` contains mechanical units with special names, such as *Hertz*, *Newton*, *Pascal* and others
+* `MiscUnits` contains non-mechanical units with special names, such as *Celsius*, *Lumen*, *Lux* and others
+* `NonSiUnits` contains Non-SI units accepted for use with SI units, such as *Astronomical unit*, *Degree* and others
+
+Also there are classes providing some useful constants:
+
+* `MathConstants` contains dimensionless constants, such as 1 or &#960;
+* `PhysicalConstants` contains some useful physical constants, such as *Speed of light*, *Avogadro constant* and others
+
+== Core Classes
+
+The implementation contains a range of abstract base classes for elements defined by the JSR 363 API
+along with some useful implementations and utility classes.
+
+=== Dimensions
+
+Utility class `Dimensions` provides constants of basic dimensions which can be used for creating derived dimensions.
+
+=== Abstract Unit
+
+The `AbstractUnit` class implements most important methods of `javax.measure.Unit` interface.
+It has several specific subclasses, but they are not public.
+The `AbstractUnit` class is used in most of the methods of the module,
+and it can be used for further extensions and specific implementations.
+
+Typically, application code should not use the `AbstractUnit` class directly.
+Instead, it is recommended to use predefined units and do some operations with them if necessary,
+
+Unit related classes hierarchy is following:
+
+[plantuml,unit-classes,svg]
+----
+rectangle "JSR 363 API" {
+  interface Dimension
+  interface Unit<Q>
+  interface Prefix
+  interface SystemOfUnits
+}
+
+Unit -> Dimension
+
+rectangle "Visible API Implementation" {
+  abstract class AbstractUnit<Q>
+  enum MetricPrefix
+  class SystemOfUnitsImpl
+  class Units
+}
+
+rectangle "Hidden API Implementation" {
+  class AlternateUnit<Q>
+  class BaseUnit<Q>
+  class ProductUnit<Q>
+  class TransformedUnit<Q>
+}
+
+Prefix <|.. MetricPrefix
+Unit <|.. AbstractUnit
+AbstractUnit <|--- AlternateUnit
+AbstractUnit <|--- BaseUnit
+AbstractUnit <|--- ProductUnit
+AbstractUnit <|--- TransformedUnit
+
+SystemOfUnits <|.. SystemOfUnitsImpl
+SystemOfUnitsImpl o- Unit
+Unit <-- Units
+----
+
+=== Abstract Quantity
+
+Likewise the `AbstractUnit` class for unites, the `AbstractQuantity` class is the cornerstone of quantities API.
+It implements the most important methods of `javax.measure.Quantity` interface.
+
+The package provides a list of particular quantities for convenience of various unit types,
+such as `LengthAmount` or `MassAmount`.
+
+Quantity related classes hierarchy is following (particular quantities are shown partially,
+only `Length` and `Mass`, others are build on the same principles):
+
+[plantuml,quantity-classes,svg]
+----
+rectangle "JSR 363 API" {
+  interface Unit<Q>
+
+  interface Quantity<Q>
+  interface Length
+  interface Mass
+}
+
+Quantity <|-- Length
+Quantity <|-- Mass
+
+rectangle "Visible API Implementation" {
+  abstract class AbstractUnit<Q>
+
+  abstract class AbstractQuantity<Q>
+  class LengthAmount
+  class MassAmount
+
+  class Quantities
+  class QuantityDecomposer<Q>
+}
+
+Unit <|.. AbstractUnit
+
+Quantity <|... AbstractQuantity
+AbstractQuantity o- AbstractUnit
+Length <|... LengthAmount
+AbstractQuantity <|-- LengthAmount
+Mass <|... MassAmount
+AbstractQuantity <|-- MassAmount
+
+rectangle "Hidden API Implementation" {
+  class QuantityImpl
+}
+AbstractQuantity <|--- QuantityImpl
+
+QuantityDecomposer o- Unit
+Quantities --> QuantityImpl
+----
+
+=== Quantities
+
+To create quantity instance on can use `Quantities` class as factory.
+
+[source,java]
+----
+Quantity<Length> quantity = Quantities.of(1, MetricUnits.METER);
+----
+
+The alternative way can be using of special `Amount` classes, for example
+
+[source,java]
+----
+Length quantity = new LengthAmount(1, MetricUnits.METER);
+----
+
+== Formatting
+
+There is an option to format only unit name,
+and there is an option to format quantity, i.e. value and unit.
+
+There are two supported formatting options:
+
+- *Short* (default), for example, `1 m`
+- *Full*, for example, `1 meter`
+
+It is also possible to use special number formatting with quantity formats.
+Just pass needed `NumberFormat` instance to appropriate constructor.
+
+[source,java]
+----
+MeasureUnitFormat unitFormat = new MeasureUnitFormat(); //<1>
+System.out.println(unitFormat.format(MetricUnits.METER));
+
+MeasureUnitFormat fullUnitFormat = new FullUnitFormat(); //<2>
+System.out.println(fullUnitFormat.format(MetricUnits.METER));
+
+Quantity<Length> quantity = Quantities.of(1, MetricUnits.METER);
+MeasureQuantityFormat quantityFormat = new MeasureQuantityFormat(); //<3>
+System.out.println(quantityFormat.format(quantity));
+
+MeasureQuantityFormat fullQuantityFormat = new FullQuantityFormat(); //<4>
+System.out.println(fullQuantityFormat.format(quantity));
+
+MeasureQuantityFormat numberQuantityFormat
+    = new MeasureQuantityFormat(new DecimalFormat("#.000")); //<5>
+System.out.println(numberQuantityFormat.format(quantity));
+----
+<1> Default (short) unit format.
+<2> Extended (full) unit format.
+<3> Default (short) quantity format.
+<4> Extended (full) quantity format.
+<5> Default (short) quantity format with special `NumberFormat`.
+
+== Localization
+
+=== Adding new resource bundles
+
+To add new unit names or unit names for specific locale one need to provide a `ResourceBundle` instance.
+DMTex Measure project uses SPI mechanism to get acquainted about those resources.
+The `MeasureResourceBundleProvider` interface is to be implemented
+and the implementation added to be added to `/META-INF/services` folder.
+
+The `MeasureResourceBundleProvider` interface has a single method
+and its typical implementation can be like the following:
+
+[source,java]
+----
+public class MeasureResourceBundleProviderImpl
+    extends AbstractResourceBundleProvider //<1>
+    implements MeasureResourceBundleProvider {
+
+  @Override
+  public ResourceBundle getBundle(Class<? extends UnitFormat> formatClass,
+                                  Locale locale) {
+    if (FullUnitFormat.class.equals(formatClass) //<2>
+        && "en".equals(locale.getLanguage())) { //<3>
+      return super.getBundle("FullUnitFormat_unit", locale); //<4>
+    }
+    return null; //<5>
+  }
+}
+----
+<1> It is worth to extend standard `AbstractResourceBundleProvider` class to reuse its `getBundle` method.
+<2> Check format class, it should be supported.
+<3> Check `Locale` object.
+<4> Provide resource bundle name to be used for data loading.
+<5> Simply return `null` if requested format class or locale are not supported by the extension.
+
+=== Adding locale specifics
+
+Many languages uses different unit name forms for different quantity values.
+For example, singular and plural forms are typically different.
+Compare `1 meter` and `2 meters`.
+
+DMTex Measure project provides support for such things.
+The core point of it is `LocaleAdapter` interface.
+It is responsible for changing unit name forms depending on the quantities.
+The interface provides 2 methods.
+
+[plantuml,locale-adapter,svg]
+----
+interface LocaleAdapter {
+  String name(String name, Number number)
+  String suffix(String suffix, String name, Number number)
+}
+----
+
+[cols="1,4"]
+|===
+| Method   | Description
+
+| name()   | Accepts unit key and amount, provides updated unit key
+| suffix() | Accepts unit suffix key, unit name key and amount, provides updated suffix key
+|===
+
+_Suffix_ means additional part of unit name. For example, _square_ meter.
+Various locales can have quite complex rule to build those forms.
+
+The implementation of the interface for English locale can look like following:
+
+[source,java]
+----
+class LocaleAdapterImpl implements LocaleAdapter {
+
+  @Override
+  public String name(String name, Number number) {
+    if (Math.abs(number.doubleValue()) <= 1) {
+      return name;
+    }
+    return name + ".plural";
+  }
+}
+----
+It checks the amount, and if it is greater than 1 a `".plural"` added to unit key.
+
+These locale specifics can be provided by SPI mechanism.
+One needs to implement `MeasureFormatService` interface
+and provide `LocaleAdapter` implementations with it.
+And also this mechanism allows to provide default `NumberFormat`.
+The typical implementation can be like the following:
+
+[source,java]
+----
+public class MeasureFormatServiceImpl implements MeasureFormatService {
+
+  @Override
+  public LocaleAdapter getAdapter(Locale locale) {
+    if ("en".equals(locale.getLanguage())) { //<1>
+      return new LocaleAdapterImpl();
+    }
+    return null; //<2>
+  }
+}
+----
+<1> Checks if locale is applicable.
+<2> Simply return `null` if requested format class or locale are not supported by the extension.
+

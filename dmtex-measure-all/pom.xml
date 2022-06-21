@@ -1,0 +1,48 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.github.dmtex.sdk</groupId>
+    <artifactId>dmtex-measure</artifactId>
+    <version>0.1</version>
+  </parent>
+  <artifactId>dmtex-measure-all</artifactId>
+  <packaging>jar</packaging>
+  <name>DMTex JSR 385 (javax.measure) All Units</name>
+  <description>DMTex JSR 385 (javax.measure) Implementation of All Units Aggregator</description>
+  <properties>
+    <maven.deploy.skip>true</maven.deploy.skip>
+  </properties>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>report-aggregate</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report-aggregate</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>com.github.dmtex.sdk</groupId>
+      <artifactId>dmtex-measure-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.dmtex.sdk</groupId>
+      <artifactId>dmtex-measure-core-en</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.dmtex.sdk</groupId>
+      <artifactId>dmtex-measure-core-ru</artifactId>
+    </dependency>
+  </dependencies>
+</project>

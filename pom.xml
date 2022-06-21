@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.github.dmtex.sdk</groupId>
+    <artifactId>dmtex-parent</artifactId>
+    <version>1</version>
+    <relativePath/>
+  </parent>
+  <artifactId>dmtex-measure</artifactId>
+  <version>0.1</version>
+  <packaging>pom</packaging>
+  <name>DMTex JSR 385 (javax.measure) Parent</name>
+  <description>DMTex JSR 385 (javax.measure) Implementation Parent Project</description>
+  <properties>
+    <dmtex-measure.version>1.0</dmtex-measure.version>
+  </properties>
+  <modules>
+    <module>dmtex-measure-all</module>
+    <module>dmtex-measure-core</module>
+    <module>dmtex-measure-core-en</module>
+    <module>dmtex-measure-core-ru</module>
+  </modules>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.github.dmtex.sdk</groupId>
+        <artifactId>dmtex-measure-core</artifactId>
+        <version>${dmtex-measure.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.dmtex.sdk</groupId>
+        <artifactId>dmtex-measure-core-en</artifactId>
+        <version>${dmtex-measure.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.dmtex.sdk</groupId>
+        <artifactId>dmtex-measure-core-ru</artifactId>
+        <version>${dmtex-measure.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+</project>
