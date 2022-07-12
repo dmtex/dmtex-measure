@@ -9,7 +9,7 @@
     <relativePath/>
   </parent>
   <artifactId>dmtex-measure</artifactId>
-  <version>0.1</version>
+  <version>0.2</version>
   <packaging>pom</packaging>
   <name>DMTex JSR 385 (javax.measure) Parent</name>
   <description>DMTex JSR 385 (javax.measure) Implementation Parent Project</description>
@@ -21,6 +21,9 @@
     <module>dmtex-measure-core</module>
     <module>dmtex-measure-core-en</module>
     <module>dmtex-measure-core-ru</module>
+    <module>dmtex-measure-misc</module>
+    <module>dmtex-measure-misc-en</module>
+    <module>dmtex-measure-misc-ru</module>
   </modules>
   <dependencyManagement>
     <dependencies>
@@ -37,6 +40,21 @@
       <dependency>
         <groupId>com.github.dmtex.sdk</groupId>
         <artifactId>dmtex-measure-core-ru</artifactId>
+        <version>${dmtex-measure.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.dmtex.sdk</groupId>
+        <artifactId>dmtex-measure-misc</artifactId>
+        <version>${dmtex-measure.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.dmtex.sdk</groupId>
+        <artifactId>dmtex-measure-misc-en</artifactId>
+        <version>${dmtex-measure.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.dmtex.sdk</groupId>
+        <artifactId>dmtex-measure-misc-ru</artifactId>
         <version>${dmtex-measure.version}</version>
       </dependency>
     </dependencies>

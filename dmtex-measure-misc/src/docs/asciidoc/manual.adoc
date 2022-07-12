@@ -1,0 +1,26 @@
+= User Manual
+
+== Introduction
+
+The manual describes aspects of the JSR 363 DMTex implementation extensions.
+
+== Overview
+
+The _dmtex-measure-misc_ module extends JSR 363 implementation and provides support for additional non-SI units.
+
+== Supported Units
+
+The out-of-the-box units providing classes in the extension are following:
+
+* `CgsUnits` contains base CGS units, such as *Centimeter*, *Gram*, *Second*, and some derived units
+* `CgsNamedUnits` contains some special CGS units, such as *Franklin*, *Gilbert* or *Stilb*
+* `InformationUnits` contains units for information measurement, such as *Bit*, *Byte* or *Bit per second*
+* `RadiationUnits` contains units related to radioactivity, such as *Rad*, *Rem*, *Curie* or *Rutherford*
+* `LegacyUnits` contains some legacy units, such as *Nautical mile*, *Light-year*, *Parsec* and others
+* `LegacyAngleUnits` contains legacy units for angle measurement, such as *Gradian*, *Turn (Revolution)* and others
+* `LegacyPressureUnits` contains legacy pressure units, such as *Bar*, *Atmosphere*, *Millimeter of mercury* and others
+* `ImperialUnits` contains British imperial units, such as British *Foot*, *Pound*, *Gallon* and others
+* `UsCustomaryUnits` contains United States customary units, such as American *Foot*, *Pound*, *Gallon* and others
+* `TroyUnits` contains Troy mass units, such as *Troy pound*, *Troy ounce*, *Grain* and others
+* `ApothecariesUnits` contains Apothecaries units, such as *Pound*, *Ounce*, *Fluid ounce* and others
+* `RussianUnits` contains old Russian units

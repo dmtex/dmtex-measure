@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.github.dmtex.sdk</groupId>
     <artifactId>dmtex-measure</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
   </parent>
   <artifactId>dmtex-measure-all</artifactId>
   <packaging>jar</packaging>
@@ -43,6 +43,18 @@
     <dependency>
       <groupId>com.github.dmtex.sdk</groupId>
       <artifactId>dmtex-measure-core-ru</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.dmtex.sdk</groupId>
+      <artifactId>dmtex-measure-misc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.dmtex.sdk</groupId>
+      <artifactId>dmtex-measure-misc-en</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.dmtex.sdk</groupId>
+      <artifactId>dmtex-measure-misc-ru</artifactId>
     </dependency>
   </dependencies>
 </project>
